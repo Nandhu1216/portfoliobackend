@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import nodemailer from 'nodemailer';
+
 
 dotenv.config();
 const app = express();
@@ -45,6 +47,37 @@ app.post('/contact', async (req, res) => {
     
     // Save to MongoDB
     await Contact.create({ name, email, message });
+    // Setup Nodemailer transporter
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,   // your Gmail address
+    pass: process.env.EMAIL_PASS    // your app password (not your Gmail password)
+  }
+});
+
+// Email content
+const mailOptions = {
+  from: formData.email,
+  to: process.env.EMAIL_USER, // Where you want to receive the form details
+  subject: 'New Contact Form Submission',
+  html: `
+    <h2>New Message from Portfolio</h2>
+    <p><strong>Name:</strong> ${formData.name}</p>
+    <p><strong>Email:</strong> ${formData.email}</p>
+    <p><strong>Message:</strong> ${formData.message}</p>
+  `
+};
+
+// Send the email
+transporter.sendMail(mailOptions, (error, info) => {
+  if (error) {
+    console.error("Email send error:", error);
+  } else {
+    console.log('Email sent: ' + info.response);
+  }
+});
+
     
     // Send success response with a success flag
     res.status(200).json({ success: true, message: 'Form submitted successfully' });
@@ -54,6 +87,36 @@ app.post('/contact', async (req, res) => {
   }
 });
 
+// Setup Nodemailer transporter
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,   // your Gmail address
+    pass: process.env.EMAIL_PASS    // your app password (not your Gmail password)
+  }
+});
+
+// Email content
+const mailOptions = {
+  from: formData.email,
+  to: process.env.EMAIL_USER, // Where you want to receive the form details
+  subject: 'New Contact Form Submission',
+  html: `
+    <h2>New Message from Portfolio</h2>
+    <p><strong>Name:</strong> ${formData.name}</p>
+    <p><strong>Email:</strong> ${formData.email}</p>
+    <p><strong>Message:</strong> ${formData.message}</p>
+  `
+};
+
+// Send the email
+transporter.sendMail(mailOptions, (error, info) => {
+  if (error) {
+    console.error("Email send error:", error);
+  } else {
+    console.log('Email sent: ' + info.response);
+  }
+});
 
 
 
