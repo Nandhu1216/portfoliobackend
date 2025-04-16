@@ -9,7 +9,7 @@ const app = express();
 
 // Enable CORS for the frontend (make sure to replace this with the correct origin if needed)
 app.use(cors({
-  origin: 'http://127.0.0.1:5500', // Change this if your frontend runs on a different port
+  origin: 'https://portfoliofrontend-alpha.vercel.app', // Change this if your frontend runs on a different port
 }));
 
 const PORT = process.env.PORT || 3000;  // Use the port from .env or fallback to 3000
@@ -31,8 +31,9 @@ app.use(bodyParser.json()); // Use bodyParser.json() for parsing JSON
 
 // Serve static files like index.html
 app.use(express.static('public'));
-
-// POST request to handle form submission
+app.get('/', (req, res) => {
+  res.send('Your service is live');
+});
 app.post('/contact', async (req, res) => {
   try {
     const { name, email, message } = req.body;
