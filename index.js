@@ -9,7 +9,7 @@ const app = express();
 
 // Enable CORS for the frontend (make sure to replace this with the correct origin if needed)
 app.use(cors({
-  origin: 'https://frontend-one-indol-68.vercel.app/', // Change this if your frontend runs on a different port
+  origin: 'https://frontend-one-indol-68.vercel.app', // Change this if your frontend runs on a different port
 }));
 
 const PORT = process.env.PORT || 3000;  // Use the port from .env or fallback to 3000
