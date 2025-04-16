@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
   res.send('Your service is live');
 });
 
-app.post('https://portfoliobackend-itwl.onrender.com', async (req, res) => {
+app.post('/contact', async (req, res) => {
   try {
     const { name, email, message } = req.body;
 
