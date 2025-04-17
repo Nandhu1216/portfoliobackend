@@ -64,7 +64,7 @@ app.post('/contact', async (req, res) => {
     // Mail content
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER,  // Email will be sent to you
+      to: process.env.EMAIL_USER,  
       subject: 'New Contact Form Submission',
       html: `
         <h2>New Message from Portfolio</h2>
