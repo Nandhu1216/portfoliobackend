@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import fetch from 'node-fetch'; // npm install node-fetch
 
 dotenv.config();
 const app = express();
@@ -26,10 +27,6 @@ const Contact = mongoose.model('Contact', {
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-app.get('/', (req, res) => {
-  res.send('Your service is live');
-});
-
 app.post('/contact', async (req, res) => {
   try {
     const { name, email, message } = req.body;
@@ -38,14 +35,26 @@ app.post('/contact', async (req, res) => {
       return res.status(400).json({ error: 'All fields are required' });
     }
 
-    // Save the form data into MongoDB
+    // 1. Save to MongoDB
     await Contact.create({ name, email, message });
-    console.log("Contact saved to MongoDB");
+    console.log("Saved to MongoDB");
 
-    // Set up Nodemailer transporter
-    
+    // 2. Forward to Formspree
+    const formspreeRes = await fetch('https://formspree.io/f/xvgknypn', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name, email, message })
+    });
 
-    res.status(200).json({ success: true, message: 'Form submitted and email sent successfully' });
+    if (!formspreeRes.ok) {
+      console.error("Formspree error:", await formspreeRes.text());
+      return res.status(500).json({ success: false, error: 'Formspree email failed' });
+    }
+
+    res.status(200).json({ success: true, message: 'Saved and email sent via Formspree' });
+
   } catch (err) {
     console.error("Error occurred:", err);
     res.status(500).json({ success: false, error: 'Something went wrong, please try again.' });
