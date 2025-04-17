@@ -50,10 +50,10 @@ app.post('/contact', async (req, res) => {
 
     if (!formspreeRes.ok) {
       console.error("Formspree error:", await formspreeRes.text());
-      return res.status(500).json({ success: false, error: 'Formspree email failed' });
+      return res.status(500).json({ success: false, error: 'Email failed' });
     }
 
-    res.status(200).json({ success: true, message: 'Saved and email sent via Formspree' });
+    res.status(200).json({ success: true, message: 'Saved and email sent' });
 
   } catch (err) {
     console.error("Error occurred:", err);
