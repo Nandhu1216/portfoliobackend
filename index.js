@@ -9,7 +9,7 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-  origin: 'https://frontend-one-indol-68.vercel.app',
+  origin: 'https://frontend-nandhu.vercel.app',
 }));
 
 const PORT = process.env.PORT || 3000;
